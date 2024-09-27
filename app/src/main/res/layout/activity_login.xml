@@ -8,7 +8,7 @@
     android:gravity="center"
     android:background="@android:color/white">
 
-    <!-- Logo ou Imagem no topo -->
+    <!-- Logo do app -->
     <ImageView
         android:id="@+id/logoImageView"
         android:layout_width="120dp"
@@ -43,16 +43,16 @@
         android:layout_height="wrap_content"
         android:text="Entrar"
         android:padding="12dp"
-        android:backgroundTint="@color/purple"
+        android:backgroundTint="@color/pink"
         android:textColor="@android:color/white" />
 
-    <!-- Link para Cadastro -->
+    <!-- Botão para criar cadastro -->
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Criar conta"
         android:padding="12dp"
-        android:backgroundTint="@color/purple"
+        android:backgroundTint="@color/pink"
         android:textColor="@android:color/white" />
 </LinearLayout>

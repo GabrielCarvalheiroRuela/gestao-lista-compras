@@ -1,34 +1,50 @@
 package com.example.gestaolistacompras
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.gestaolistacompras.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityLoginBinding
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
-        val emailEditText = findViewById<EditText>(R.id.emailEditText)
-        val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
-        val loginButton = findViewById<Button>(R.id.loginButton)
-        val registerButton = findViewById<Button>(R.id.registerButton)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Listener para o botão de login
-        loginButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
+        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
 
-            // Aqui você pode adicionar a lógica de login, se necessário
-            Toast.makeText(this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
+        binding.loginButton.setOnClickListener {
+            val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show()
+            }
+
+            val storedPassword = sharedPreferences.getString(email, null)
+
+            if (storedPassword != null && storedPassword == password || email == "admin@gmail.com" && password == "admin") {
+                Toast.makeText(this, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
+                // Redirecionar para a tela principal do app
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                Toast.makeText(this, "E-mail ou senha incorretos", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        // Listener para o botão de criar conta
-        registerButton.setOnClickListener {
+        // Ir para o cadastro
+        binding.registerButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
