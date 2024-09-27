@@ -5,15 +5,75 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="42dp"
     tools:context=".MainActivity">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/upView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Botão para voltar a página -->
+        <ImageButton
+            android:id="@+id/BackimageButton"
+            android:layout_width="25dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Logout"
+            android:scaleType="centerInside"
+            android:src="@drawable/back" />
+
+        <!-- Campo de busca -->
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="317dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:iconifiedByDefault="false"
+            android:queryHint="Buscar..." />
+
+        <!-- Botão para deslogar do sistema -->
+        <ImageButton
+            android:id="@+id/LogoutimageButton"
+            android:layout_width="24dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Logout"
+            android:scaleType="centerInside"
+            android:src="@drawable/logout" />
+
+    </LinearLayout>
+
+    <!-- Botão de adicionar -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/AddButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_margin="38dp"
+        android:contentDescription="Adicionar"
+        android:src="@drawable/add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:backgroundTint="@color/pink"
+        app:tint="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- RecyclerView para os cards de item -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/upView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

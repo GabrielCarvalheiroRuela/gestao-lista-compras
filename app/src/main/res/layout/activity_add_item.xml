@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Botão de voltar a página -->
+    <ImageButton
+        android:id="@+id/BackimageButton"
+        android:layout_width="25dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:adjustViewBounds="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Logout"
+        android:scaleType="centerInside"
+        android:src="@drawable/back" />
+
+    <!-- Título de adicionar item -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adicionar item"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Campo para o nome do item -->
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nome do item"
+        android:inputType="text" />
+
+    <!-- Campo para quantidade do item -->
+    <EditText
+        android:id="@+id/editTextQuantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Quantidade"
+        android:inputType="number" />
+
+    <!-- Seleção do tipo de contagem do item -->
+    <Button
+        android:id="@+id/buttonUnit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selecionar Unidade"
+        android:textColor="@android:color/black"
+        android:gravity="left"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/white" />
+
+    <!-- Seleção da categoria do item -->
+    <Button
+        android:id="@+id/buttonCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selecionar Categoria"
+        android:textColor="@android:color/black"
+        android:gravity="left"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/white"/>
+
+    <!-- Botão para adicionar produto -->
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Adicionar"
+        android:backgroundTint="@color/pink"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="24dp" />
+
+</LinearLayout>
