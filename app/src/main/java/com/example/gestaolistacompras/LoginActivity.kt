@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
             val storedPassword = sharedPreferences.getString(email, null)
 
             // Verifica se o email e senha corresponde a algum cadastro ou verifica se esta sendo feito login com usuário admin
-            if (storedPassword != null && storedPassword == password || email == "admin@gmail.com" && password == "admin") {
+            if (storedPassword != null && storedPassword == password) {
                 Toast.makeText(this, "Login realizado com sucesso", Toast.LENGTH_SHORT).show()
                 // Redirecionar para a tela principal do app
                 val intent = Intent(this, MainActivity::class.java)
