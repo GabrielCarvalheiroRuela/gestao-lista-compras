@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="42dp"
-    tools:context=".MainActivity">
+    tools:context=".ListActivity">
 
     <LinearLayout
         android:id="@+id/upView"
@@ -67,7 +67,7 @@
 
     <!-- RecyclerView para os cards de item -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/ListRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/upView"

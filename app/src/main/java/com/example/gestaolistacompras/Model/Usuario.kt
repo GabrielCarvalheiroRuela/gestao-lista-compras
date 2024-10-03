@@ -1,9 +1,9 @@
 package com.example.gestaolistacompras
 
-// Criação do objeto usuario
+// Cria o objeto Usuario
 data class Usuario(
     val nome: String,
     val email: String,
     val senha: String,
-    val listaDeCompras: MutableList<String> = mutableListOf()
+    val listaDeCompras: MutableList<Lista> = mutableListOf()
 )

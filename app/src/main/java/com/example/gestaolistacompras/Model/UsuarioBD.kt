@@ -2,7 +2,7 @@ package com.example.gestaolistacompras
 
 object UsuarioBD {
     // Lista de usuários cadastrados
-    private val usuariosCadastrados = mutableListOf<Usuario>()
+    public val usuariosCadastrados = mutableListOf<Usuario>()
 
     // Função para adicionar usuário cadastrado na lista
     fun adicionarUsuario(usuario: Usuario) {
@@ -19,8 +19,14 @@ object UsuarioBD {
         return usuariosCadastrados.any { it.email == email }
     }
 
-    // Cria um usuário admin para facilitar testes
+    // Cria um usuários para facilitar testes
     init {
-        usuariosCadastrados.add(Usuario("Admin", "admin@gmail.com", "admin"))
+        val admin = Usuario("admin", "admin", "admin")
+        admin.listaDeCompras.add(Lista("admin", null))
+        usuariosCadastrados.add(admin)
+
+        val gab = Usuario("gab", "gab", "gab")
+        gab.listaDeCompras.add(Lista("gab", null))
+        usuariosCadastrados.add(gab)
     }
 }

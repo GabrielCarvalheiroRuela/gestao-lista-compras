@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.gestaolistacompras">
 
+    <!-- Permissão para ler o armazenamento externo -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -17,6 +21,8 @@
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".AddItemActivity"></activity>
+        <activity android:name=".AddListActivity"></activity>
+        <activity android:name=".ListActivity"></activity>
         <activity
             android:name=".LoginActivity"
             android:exported="true">

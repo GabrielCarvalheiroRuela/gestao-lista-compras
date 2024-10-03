@@ -27,13 +27,15 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Verifica o usuário na 'base de dados'
+            // Verifica o usuário na lista de usuariosCadastrados
             val usuario = UsuarioBD.verificarUsuario(email, senha)
 
             if (usuario != null) {
                 Toast.makeText(this, "Login realizado com sucesso ${usuario.nome}", Toast.LENGTH_SHORT).show()
-                // Redireciona para a tela principal
-                val intent = Intent(this, MainActivity::class.java)
+
+                // Redireciona para a tela principal, passando apenas o email
+                val intent = Intent(this, ListActivity::class.java)
+                intent.putExtra("email", usuario.email) // Passa o email do usuário
                 startActivity(intent)
                 finish()
             } else {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/card_background"
+    android:layout_margin="8dp">
+
+
+    <!-- Imagem da lista -->
+    <ImageView
+        android:id="@+id/listImageView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:src="@android:drawable/ic_menu_gallery"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Nome da lista -->
+    <TextView
+        android:id="@+id/listNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nome da Lista"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"/>
+</LinearLayout>
