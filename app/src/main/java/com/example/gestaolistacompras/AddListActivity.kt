@@ -1,30 +1,29 @@
 package com.example.gestaolistacompras
 
 import android.app.Activity
-import com.example.gestaolistacompras.Model.Usuario
-import com.example.gestaolistacompras.Model.Lista
 import android.content.Intent
-import java.util.UUID
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
-import com.example.gestaolistacompras.MainActivity
 import androidx.appcompat.app.AppCompatActivity
+import com.example.gestaolistacompras.Model.Lista
 import com.example.gestaolistacompras.databinding.ActivityAddListBinding
+import java.util.UUID
 
 class AddListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddListBinding
     private var selectedImageUri: Uri? = null
-    private lateinit var usuario: Usuario
+    private var email: String? = null // Armazenará o e-mail do usuário
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        usuario = intent.getSerializableExtra("usuario") as? Usuario ?: throw IllegalArgumentException("Usuário não fornecido")
+        // Captura o email da Intent
+        email = intent.getStringExtra("email") ?: throw IllegalArgumentException("Usuário não fornecido")
 
         // Botão de voltar para tela principal
         binding.BackimageButton.setOnClickListener {
@@ -34,10 +33,10 @@ class AddListActivity : AppCompatActivity() {
             finish()
         }
 
-        // Botao para selecionar imagem da galeria
+        // Botão para selecionar imagem da galeria
         binding.buttonSelecionarImagem.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, 0)
+            startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
         }
 
         // Botão para adicionar a lista
@@ -51,10 +50,10 @@ class AddListActivity : AppCompatActivity() {
                     nome = nomeLista,
                     imagemUri = selectedImageUri
                 )
-                usuario.listaDeCompras.add(novaLista) // Adiciona a nova lista
 
-                Toast.makeText(this, "Lista adicionada!", Toast.LENGTH_SHORT).show()
-                setResult(RESULT_OK)
+                val intent = Intent()
+                intent.putExtra("novaLista", novaLista)
+                setResult(Activity.RESULT_OK, intent)
                 finish()
             } else {
                 Toast.makeText(this, "Por favor, preencha todos os dados.", Toast.LENGTH_SHORT).show()
@@ -65,9 +64,14 @@ class AddListActivity : AppCompatActivity() {
     // Salva uri da imagem
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             selectedImageUri = data?.data
-            binding.imageView.setImageURI(selectedImageUri) // Atualiza a ImageView com a imagem selecionada
+            // Atualiza a ImageView com a imagem selecionada
+            binding.imageView.setImageURI(selectedImageUri)
         }
+    }
+
+    companion object {
+        private const val REQUEST_CODE_PICK_IMAGE = 0
     }
 }

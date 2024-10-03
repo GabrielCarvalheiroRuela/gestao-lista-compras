@@ -2,6 +2,7 @@ package com.example.gestaolistacompras
 
 import android.content.Intent
 import android.os.Bundle
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gestaolistacompras.Model.Usuario
@@ -44,7 +45,7 @@ class ListActivity : AppCompatActivity() {
         binding.AddButton.setOnClickListener {
             val intent = Intent(this, AddListActivity::class.java)
             intent.putExtra("email", email)
-            startActivityForResult(intent, REQUEST_CODE_ADD_LIST) // Mantenha o finish aqui, se necessário
+            startActivityForResult(intent, REQUEST_CODE_ADD_LIST)
         }
 
         // Botão para sair do sistema
@@ -71,19 +72,17 @@ class ListActivity : AppCompatActivity() {
     // Método que executa quando volta para tela
     override fun onResume() {
         super.onResume()
-        // Carrega as listas do usuário
         loadUserLists()
     }
 
     // Quando usuario voltar vai carregar as listas novamente
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_MAIN_ACTIVITY && resultCode == RESULT_OK) {
-            val updatedList = data?.getSerializableExtra("updatedList") as? List<Lista> // Alterar para Lista
-            updatedList?.let {
-                // Obtém o usuário logado novamente
+        if (requestCode == REQUEST_CODE_ADD_LIST && resultCode == Activity.RESULT_OK) {
+            val novaLista = data?.getSerializableExtra("novaLista") as? Lista
+            novaLista?.let {
                 val usuario = UsuarioBD.usuariosCadastrados.find { it.email == email }
-                usuario?.listaDeCompras?.addAll(it)
+                usuario?.listaDeCompras?.add(it)
                 loadUserLists()
             }
         }

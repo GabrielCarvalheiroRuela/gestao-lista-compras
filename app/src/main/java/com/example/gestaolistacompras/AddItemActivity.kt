@@ -8,20 +8,32 @@ import com.example.gestaolistacompras.Model.Item
 import com.example.gestaolistacompras.databinding.ActivityAddItemBinding
 
 class AddItemActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityAddItemBinding
     private var selectedUnit: String? = null
     private var selectedCategory: String? = null
+    private var email: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // pega o email do user
+        email = intent.getStringExtra("email")
+
+        if (email == null) {
+            AlertDialog.Builder(this)
+                .setTitle("Erro")
+                .setMessage("Usuário não fornecido.")
+                .setPositiveButton("OK") { _, _ -> finish() }
+                .show()
+            return
+        }
+
         setupUnitButton()
         setupCategoryButton()
 
-        // Botao para adicionar item
+        // Botão para adicionar item
         binding.buttonAdd.setOnClickListener {
             val name = binding.editTextName.text.toString()
             val quantity = binding.editTextQuantity.text.toString().toIntOrNull()
@@ -49,7 +61,7 @@ class AddItemActivity : AppCompatActivity() {
             }
         }
 
-        // Botao para voltar para a tela principal
+        // Botão para voltar para a tela principal
         binding.BackimageButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK // Limpa a pilha de atividades
