@@ -5,20 +5,32 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Botão de voltar a página -->
+    <ImageButton
+        android:id="@+id/BackimageButton"
+        android:layout_width="25dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:adjustViewBounds="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Logout"
+        android:scaleType="centerInside"
+        android:src="@drawable/back" />
+
     <TextView
-        android:id="@+id/textViewAdicionarLista"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Adicionar lista"
+        android:text="Adicionar Lista"
         android:textSize="24sp"
-        android:layout_gravity="center"
-        android:paddingBottom="16dp" />
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp" />
 
     <EditText
         android:id="@+id/editTextNomeLista"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nome da lista" />
+        android:hint="Nome da lista"
+        android:layout_marginBottom="46dp"/>
 
     <ImageView
         android:id="@+id/imageView"
@@ -41,8 +53,10 @@
         android:id="@+id/buttonAdicionar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Adicionar"
+        android:text="Adicionar a lista"
         android:layout_gravity="center"
+        android:backgroundTint="@color/pink"
+        android:textSize="16dp"
         android:layout_marginTop="16dp" />
 
 </LinearLayout>

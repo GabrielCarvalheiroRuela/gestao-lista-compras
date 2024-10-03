@@ -4,14 +4,28 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gestaolistacompras.Model.Lista
 import com.example.gestaolistacompras.databinding.ListCardBinding
 
-class ListAdapter(private val listas: MutableList<Lista>) : RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
+class ListAdapter(
+    private val listas: MutableList<Lista>,
+    private val onItemClick: (Lista) -> Unit // Adiciona um lambda para o clique
+) : RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
 
-    inner class ListViewHolder(val binding: ListCardBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ListViewHolder(val binding: ListCardBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            // Configura o clique no item
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    // Chama a lista clicada
+                    onItemClick(listas[position])
+                }
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        // Infla o layout utilizando o View Binding
         val binding = ListCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ListViewHolder(binding)
     }
@@ -34,7 +48,7 @@ class ListAdapter(private val listas: MutableList<Lista>) : RecyclerView.Adapter
                 binding.listImageView.setImageResource(android.R.drawable.ic_menu_gallery)
             }
         } ?: run {
-            // Define a imagem padrão se nao tiver imagem
+            // Define a imagem padrão se não tiver imagem
             binding.listImageView.setImageResource(android.R.drawable.ic_menu_gallery)
         }
     }

@@ -2,11 +2,12 @@ package com.example.gestaolistacompras.Model
 
 import java.io.Serializable
 
+// Cria um objeto Item
 data class Item(
     val image: Int,
     val name: String,
-    var quantity: Int,
+    val quantity: Int,
     val unit: String,
     val category: String,
-    var isPurchased: Boolean
+    var checked: Boolean
 ) : Serializable

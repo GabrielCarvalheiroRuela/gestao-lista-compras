@@ -15,6 +15,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var itemAdapter: ItemAdapter
     private val itemList = ItemBD.getItemList()
 
+    // Definindo o código de solicitação como uma constante no escopo da classe
+    private val REQUEST_CODE_ADD_ITEM = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -25,47 +28,35 @@ class MainActivity : AppCompatActivity() {
         itemAdapter = ItemAdapter(itemList)
         binding.recyclerView.adapter = itemAdapter
 
-        // Ação do botão de voltar para tela principal
-        binding.BackimageButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_ADD_ITEM)
-        }
-
-        // Ação do botão de logout
-        binding.LogoutimageButton.setOnClickListener {
-            val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.clear() // Remove todos os dados salvos
-            editor.apply()
-
-            // Redirecionar para a tela de login
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Limpa a pilha de atividades
-            startActivity(intent)
-            finish()
-        }
+        // Use Id para carregar os itens da lista clicada
+        val listaId = intent.getStringExtra("lista_id")
+        val email = intent.getStringExtra("email")
 
         // Botão de adicionar
         binding.AddButton.setOnClickListener {
             val intent = Intent(this, AddItemActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_ADD_ITEM)
         }
+
+        // Ação do botão de voltar para a tela de lista
+        binding.BackimageButton.setOnClickListener {
+            val intent = Intent(this, ListActivity::class.java)
+            intent.putExtra("email", email)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
     }
 
-    // Método chamado quando a AddItemActivity retornar um resultado
+    // Método executa quando a tela é carregada novamente
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_ITEM && resultCode == RESULT_OK) {
             val newItem = data?.getSerializableExtra("newItem") as? Item
             newItem?.let {
                 itemList.add(it)
-                itemAdapter.notifyDataSetChanged() // Atualiza o RecyclerView
+                itemAdapter.notifyDataSetChanged()
             }
         }
-    }
-
-    // Código da requisição para adicionar um item
-    companion object {
-        const val REQUEST_CODE_ADD_ITEM = 1
     }
 }

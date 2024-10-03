@@ -2,6 +2,7 @@ package com.example.gestaolistacompras
 
 import android.content.Intent
 import android.os.Bundle
+import com.example.gestaolistacompras.Model.Usuario
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.gestaolistacompras.databinding.ActivityRegisterBinding

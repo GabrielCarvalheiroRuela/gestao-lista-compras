@@ -1,6 +1,6 @@
-package com.example.gestaolistacompras
+package com.example.gestaolistacompras.Model
 
-// Cria o objeto Usuario
+// Cria um objeto Usuario
 data class Usuario(
     val nome: String,
     val email: String,

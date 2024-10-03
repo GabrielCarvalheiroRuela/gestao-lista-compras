@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.gestaolistacompras.Model.Item
-import com.example.gestaolistacompras.Model.ItemBD
 import com.example.gestaolistacompras.databinding.ActivityAddItemBinding
 
 class AddItemActivity : AppCompatActivity() {
@@ -22,21 +21,44 @@ class AddItemActivity : AppCompatActivity() {
         setupUnitButton()
         setupCategoryButton()
 
-        // Ação do botão de adicionar item
+        // Botao para adicionar item
         binding.buttonAdd.setOnClickListener {
-            addItem()
+            val name = binding.editTextName.text.toString()
+            val quantity = binding.editTextQuantity.text.toString().toIntOrNull()
+            val unit = selectedUnit
+            val category = selectedCategory
+
+            if (name.isNotEmpty() && quantity != null && unit != null && category != null) {
+                val imageResId = getImageForCategory(category)
+
+                // Cria o novo item
+                val newItem = Item(imageResId, name, quantity, unit, category, false)
+
+                // Retorna se foi adicionado
+                val intent = Intent()
+                intent.putExtra("newItem", newItem)
+                setResult(RESULT_OK, intent)
+                finish()
+            } else {
+                // Exibe uma mensagem de erro se os campos não forem preenchidos corretamente
+                AlertDialog.Builder(this)
+                    .setTitle("Erro")
+                    .setMessage("Preencha todos os campos corretamente.")
+                    .setPositiveButton("OK", null)
+                    .show()
+            }
         }
 
-        // Ação do botão de voltar para a tela principal
+        // Botao para voltar para a tela principal
         binding.BackimageButton.setOnClickListener {
-            // Aqui você apenas volta para a MainActivity sem passar um resultado
             val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent) // Remove startActivityForResult
-            finish() // Encerra a AddItemActivity
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK // Limpa a pilha de atividades
+            startActivity(intent)
+            finish()
         }
     }
 
-    // Função de seleção do tipo de unidade na tela de adicionar item
+    // Mini tela de seleção de unidade de contagem
     private fun setupUnitButton() {
         val units = arrayOf("Unidades", "KG", "g", "Litros")
         binding.buttonUnit.setOnClickListener {
@@ -50,7 +72,7 @@ class AddItemActivity : AppCompatActivity() {
         }
     }
 
-    // Função de seleção da categoria na tela de adicionar item
+    // Mini tela de seleção de categoria
     private fun setupCategoryButton() {
         val categories = arrayOf("Carnes", "Vegetais", "Frutas", "Outros")
         binding.buttonCategory.setOnClickListener {
@@ -60,34 +82,6 @@ class AddItemActivity : AppCompatActivity() {
                     selectedCategory = categories[which]
                     binding.buttonCategory.text = selectedCategory
                 }
-                .show()
-        }
-    }
-
-    // Função para adicionar item ao clicar no botão
-    private fun addItem() {
-        val name = binding.editTextName.text.toString()
-        val quantity = binding.editTextQuantity.text.toString().toIntOrNull()
-        val unit = selectedUnit
-        val category = selectedCategory
-
-        if (name.isNotEmpty() && quantity != null && unit != null && category != null) {
-            val imageResId = getImageForCategory(category)
-
-            // Cria o novo item
-            val newItem = Item(imageResId, name, quantity, unit, category, false)
-
-            // Retorna o resultado para a MainActivity
-            val intent = Intent()
-            intent.putExtra("newItem", newItem)
-            setResult(RESULT_OK, intent) // Mantém o retorno do resultado
-            finish() // Encerra a AddItemActivity
-        } else {
-            // Exibe uma mensagem de erro se os campos não forem preenchidos corretamente
-            AlertDialog.Builder(this)
-                .setTitle("Erro")
-                .setMessage("Preencha todos os campos corretamente.")
-                .setPositiveButton("OK", null)
                 .show()
         }
     }
