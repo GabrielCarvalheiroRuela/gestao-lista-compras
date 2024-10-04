@@ -6,7 +6,6 @@ import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.appcompat.widget.SearchView
-import com.example.gestaolistacompras.Model.Usuario
 import com.example.gestaolistacompras.Model.Lista
 import com.example.gestaolistacompras.databinding.ActivityListBinding
 
@@ -38,9 +37,10 @@ class ListActivity : AppCompatActivity() {
         binding.ListRecyclerView.adapter = listAdapter
         binding.ListRecyclerView.layoutManager = LinearLayoutManager(this)
 
+        // Captura o email do usuário logado
         email = intent.getStringExtra("email")
 
-        // Chama função para carregar lista do usuário
+        // Carrega as listas do usuário
         loadUserLists()
 
         // Configura o campo de busca
@@ -79,7 +79,6 @@ class ListActivity : AppCompatActivity() {
     // Filtra as listas de acordo com o texto inserido
     private fun filterLists(query: String) {
         listasFiltradas.clear()
-        // Se não tiver busca mostra todas as listas
         if (query.isEmpty()) {
             listasFiltradas.addAll(listas)
         } else {
@@ -92,18 +91,21 @@ class ListActivity : AppCompatActivity() {
         listAdapter.notifyDataSetChanged()
     }
 
-    // Carrega as listas do usuário
+    // Carrega as listas do usuário logado
     private fun loadUserLists() {
         email?.let { userEmail ->
+            // Busca o usuário na base de dados usando o email
             val usuario = UsuarioBD.usuariosCadastrados.find { it.email == userEmail }
+
             if (usuario != null) {
-                // Limpa a lista
+                // Limpa as listas anteriores
                 listas.clear()
+                // Adiciona as listas do usuário
                 listas.addAll(usuario.listaDeCompras)
-                // Limpa as listas filtradas
+                // Atualiza as listas filtradas
                 listasFiltradas.clear()
-                // Exibe todas as listas
                 listasFiltradas.addAll(listas)
+                // Notifica o adapter sobre mudanças
                 listAdapter.notifyDataSetChanged()
             }
         }
@@ -115,14 +117,15 @@ class ListActivity : AppCompatActivity() {
         loadUserLists()
     }
 
-    // Quando usuario voltar vai carregar as listas novamente
+    // Lida com o resultado da atividade de adicionar lista
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_LIST && resultCode == Activity.RESULT_OK) {
             val novaLista = data?.getSerializableExtra("novaLista") as? Lista
-            novaLista?.let {
+            novaLista?.let { lista ->
+                // Busca o usuário pelo email
                 val usuario = UsuarioBD.usuariosCadastrados.find { it.email == email }
-                usuario?.listaDeCompras?.add(it)
+                usuario?.listaDeCompras?.add(lista)
                 loadUserLists()
             }
         }

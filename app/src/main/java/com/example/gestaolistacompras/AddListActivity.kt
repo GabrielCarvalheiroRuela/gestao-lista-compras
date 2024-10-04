@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.gestaolistacompras.Model.Lista
+import com.example.gestaolistacompras.Model.ListaBD
 import com.example.gestaolistacompras.databinding.ActivityAddListBinding
 import java.util.UUID
 
@@ -44,16 +45,15 @@ class AddListActivity : AppCompatActivity() {
             val nomeLista = binding.editTextNomeLista.text.toString()
 
             if (nomeLista.isNotBlank()) {
-                // Gera um ID único e define outros dados
                 val novaLista = Lista(
                     id = UUID.randomUUID().toString(),
                     nome = nomeLista,
                     imagemUri = selectedImageUri
                 )
 
-                val intent = Intent()
-                intent.putExtra("novaLista", novaLista)
-                setResult(Activity.RESULT_OK, intent)
+                ListaBD.addLista(novaLista) // Adiciona a lista no banco de dados
+
+                setResult(Activity.RESULT_OK)
                 finish()
             } else {
                 Toast.makeText(this, "Por favor, preencha todos os dados.", Toast.LENGTH_SHORT).show()
@@ -61,7 +61,7 @@ class AddListActivity : AppCompatActivity() {
         }
     }
 
-    // Salva uri da imagem
+    // Salva URI da imagem
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == Activity.RESULT_OK) {
