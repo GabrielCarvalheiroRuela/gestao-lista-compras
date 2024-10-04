@@ -28,6 +28,8 @@ object UsuarioBD {
     init {
         // Usuário admin
         val admin = Usuario("admin", "admin", "admin")
+        // Usuário Gab
+        val gab = Usuario("gab", "gab", "gab")
 
         // Listas admin
         val adminLista1 = Lista(UUID.randomUUID().toString(), "Lista do Admin 1", null, mutableListOf())
@@ -36,8 +38,7 @@ object UsuarioBD {
         admin.listaDeCompras.addAll(listOf(adminLista1, adminLista2))
         usuariosCadastrados.add(admin)
 
-        // Usuário Gab
-        val gab = Usuario("gab", "gab", "gab")
+
 
         // Listas gab
         val gabLista1 = Lista(UUID.randomUUID().toString(), "Lista do Gab 1", null, mutableListOf())
