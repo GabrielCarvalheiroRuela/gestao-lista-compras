@@ -7,7 +7,7 @@ import com.example.gestaolistacompras.Model.Lista
 
 object UsuarioBD {
     // Lista de usuários cadastrados
-    public val usuariosCadastrados = mutableListOf<Usuario>()
+    val usuariosCadastrados = mutableListOf<Usuario>()
 
     // Função para adicionar usuário cadastrado na lista
     fun adicionarUsuario(usuario: Usuario) {
@@ -24,28 +24,26 @@ object UsuarioBD {
         return usuariosCadastrados.any { it.email == email }
     }
 
-    // Cria um usuários para facilitar testes
+    // Cria usuários com duas listas, para facilitar testes
     init {
+        // Usuário admin
         val admin = Usuario("admin", "admin", "admin")
-        val adminLista = Lista(UUID.randomUUID().toString(), "Lista do Admin", null)
 
-        // Adiciona 3 itens diferentes à lista do admin
-        adminLista.listaDeItens.add(Item(1, "Arroz", 2, "kg", "Grãos", false))
-        adminLista.listaDeItens.add(Item(2, "Feijão", 1, "kg", "Grãos", false))
-        adminLista.listaDeItens.add(Item(3, "Frango", 1, "kg", "Carnes", false))
+        // Listas admin
+        val adminLista1 = Lista(UUID.randomUUID().toString(), "Lista do Admin 1", null, mutableListOf())
+        val adminLista2 = Lista(UUID.randomUUID().toString(), "Lista do Admin 2", null, mutableListOf())
 
-        admin.listaDeCompras.add(adminLista)
+        admin.listaDeCompras.addAll(listOf(adminLista1, adminLista2))
         usuariosCadastrados.add(admin)
 
+        // Usuário Gab
         val gab = Usuario("gab", "gab", "gab")
-        val gabLista = Lista(UUID.randomUUID().toString(), "Lista do Gab", null)
 
-        // Adiciona 3 itens diferentes à lista do gab
-        gabLista.listaDeItens.add(Item(4, "Tomate", 3, "unidades", "Vegetais", false))
-        gabLista.listaDeItens.add(Item(5, "Banana", 6, "unidades", "Frutas", false))
-        gabLista.listaDeItens.add(Item(6, "Leite", 2, "Litros", "Laticínios", false))
+        // Listas gab
+        val gabLista1 = Lista(UUID.randomUUID().toString(), "Lista do Gab 1", null, mutableListOf())
+        val gabLista2 = Lista(UUID.randomUUID().toString(), "Lista do Gab 2", null, mutableListOf())
 
-        gab.listaDeCompras.add(gabLista)
+        gab.listaDeCompras.addAll(listOf(gabLista1, gabLista2))
         usuariosCadastrados.add(gab)
     }
 }

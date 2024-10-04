@@ -13,9 +13,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var itemAdapter: ItemAdapter
-    private val itemList = ItemBD.getItemList()
+    private var itemList = mutableListOf<Item>()
 
-    // Definindo o código de solicitação como uma constante no escopo da classe
+    // código de requisição para adicionar item
     private val REQUEST_CODE_ADD_ITEM = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,18 +23,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Pega Id da lista clicada para filtrar itens corretos
+        val listaId = intent.getStringExtra("lista_id")
+        val email = intent.getStringExtra("email")
+
+        // Carrega os itens da lista clicada
+        listaId?.let {
+            itemList = ItemBD.getItensDaLista(it)
+        }
+
         // Configuração RecyclerView
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         itemAdapter = ItemAdapter(itemList)
         binding.recyclerView.adapter = itemAdapter
 
-        // Use Id para carregar os itens da lista clicada
-        val listaId = intent.getStringExtra("lista_id")
-        val email = intent.getStringExtra("email")
-
         // Botão de adicionar
         binding.AddButton.setOnClickListener {
             val intent = Intent(this, AddItemActivity::class.java)
+            intent.putExtra("email", email)
+            intent.putExtra("lista_id", listaId) // Passar também o listaId
             startActivityForResult(intent, REQUEST_CODE_ADD_ITEM)
         }
 
@@ -53,7 +60,15 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_ITEM && resultCode == RESULT_OK) {
             val newItem = data?.getSerializableExtra("newItem") as? Item
+            val listaId = intent.getStringExtra("lista_id")
+
             newItem?.let {
+                // Adicionar item na lista correta
+                listaId?.let { id ->
+                    ItemBD.addItemNaLista(id, it)
+                }
+
+                // Atualizar a lista e a RecyclerView
                 itemList.add(it)
                 itemAdapter.notifyDataSetChanged()
             }
