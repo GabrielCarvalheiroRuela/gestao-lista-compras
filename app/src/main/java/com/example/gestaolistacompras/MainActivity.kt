@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.SearchView
 import com.example.gestaolistacompras.Adapter.ItemAdapter
 import com.example.gestaolistacompras.Model.Item
 import com.example.gestaolistacompras.Model.ItemBD
@@ -14,8 +15,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var itemAdapter: ItemAdapter
     private var itemList = mutableListOf<Item>()
+    private val filteredItemList = mutableListOf<Item>() // Lista para itens filtrados
 
-    // código de requisição para adicionar item
+    // Código de requisição para adicionar item
     private val REQUEST_CODE_ADD_ITEM = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,12 +32,16 @@ class MainActivity : AppCompatActivity() {
         // Carrega os itens da lista clicada
         listaId?.let {
             itemList = ItemBD.getItensDaLista(it)
+            filteredItemList.addAll(itemList) // Inicializa a lista filtrada
         }
 
         // Configuração RecyclerView
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        itemAdapter = ItemAdapter(itemList)
+        itemAdapter = ItemAdapter(filteredItemList)
         binding.recyclerView.adapter = itemAdapter
+
+        // Configura o campo de busca
+        setupSearchView()
 
         // Botão de adicionar
         binding.AddButton.setOnClickListener {
@@ -55,6 +61,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Configura o campo de busca
+    private fun setupSearchView() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterItems(newText?.lowercase() ?: "")
+                return true
+            }
+        })
+    }
+
+    // Filtra os itens de acordo com o texto inserido
+    private fun filterItems(query: String) {
+        filteredItemList.clear()
+        if (query.isEmpty()) {
+            filteredItemList.addAll(itemList) // Se não houver busca, mostra todos os itens
+        } else {
+            itemList.forEach { item ->
+                if (item.name.lowercase().contains(query)) {
+                    filteredItemList.add(item)
+                }
+            }
+        }
+        itemAdapter.notifyDataSetChanged() // Atualiza a RecyclerView
+    }
+
     // Método executa quando a tela é carregada novamente
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -70,7 +105,7 @@ class MainActivity : AppCompatActivity() {
 
                 // Atualizar a lista e a RecyclerView
                 itemList.add(it)
-                itemAdapter.notifyDataSetChanged()
+                filterItems("") // Atualiza a busca para incluir o novo item
             }
         }
     }

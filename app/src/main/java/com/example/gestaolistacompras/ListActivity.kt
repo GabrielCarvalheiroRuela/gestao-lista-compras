@@ -79,8 +79,9 @@ class ListActivity : AppCompatActivity() {
     // Filtra as listas de acordo com o texto inserido
     private fun filterLists(query: String) {
         listasFiltradas.clear()
+        // Se não tiver busca mostra todas as listas
         if (query.isEmpty()) {
-            listasFiltradas.addAll(listas)  // Se não houver busca, mostra todas as listas
+            listasFiltradas.addAll(listas)
         } else {
             listas.forEach { lista ->
                 if (lista.nome.lowercase().contains(query)) {
