@@ -17,9 +17,7 @@ class ListActivity : AppCompatActivity() {
     private val listasFiltradas = mutableListOf<Lista>()
     private var email: String? = null
 
-    // Tipo de request
     private val REQUEST_CODE_ADD_LIST = 1
-    private val REQUEST_CODE_MAIN_ACTIVITY = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +30,7 @@ class ListActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("lista_id", lista.id)
             intent.putExtra("email", email)
-            startActivityForResult(intent, REQUEST_CODE_MAIN_ACTIVITY)
+            startActivityForResult(intent, REQUEST_CODE_ADD_LIST)
         }
         binding.ListRecyclerView.adapter = listAdapter
         binding.ListRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -62,7 +60,6 @@ class ListActivity : AppCompatActivity() {
         }
     }
 
-    // Configura o campo de busca para filtrar as listas
     private fun setupSearchView() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -76,7 +73,6 @@ class ListActivity : AppCompatActivity() {
         })
     }
 
-    // Filtra as listas de acordo com o texto inserido
     private fun filterLists(query: String) {
         listasFiltradas.clear()
         if (query.isEmpty()) {
@@ -91,40 +87,30 @@ class ListActivity : AppCompatActivity() {
         listAdapter.notifyDataSetChanged()
     }
 
-    // Carrega as listas do usuário logado
     private fun loadUserLists() {
         email?.let { userEmail ->
-            // Busca o usuário na base de dados usando o email
             val usuario = UsuarioBD.usuariosCadastrados.find { it.email == userEmail }
 
             if (usuario != null) {
-                // Limpa as listas anteriores para evitar duplicações
                 listas.clear()
                 listasFiltradas.clear()
 
-                // Adiciona as listas do usuário
                 listas.addAll(usuario.listaDeCompras)
-
-                // Atualiza as listas filtradas
                 listasFiltradas.addAll(listas)
 
-                // Notifica o adapter sobre mudanças
                 listAdapter.notifyDataSetChanged()
             }
         }
     }
 
-    // Método que executa quando volta para tela
     override fun onResume() {
         super.onResume()
         loadUserLists()
     }
 
-    // Lida com o resultado da atividade de adicionar lista
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_LIST && resultCode == Activity.RESULT_OK) {
-            // A lista será carregada novamente em onResume através de loadUserLists()
             loadUserLists()
         }
     }

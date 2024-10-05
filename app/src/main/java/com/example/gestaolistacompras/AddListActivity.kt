@@ -16,28 +16,27 @@ class AddListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddListBinding
     private var selectedImageUri: Uri? = null
-    private var email: String? = null // Armazenará o e-mail do usuário
+    private var email: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Captura o email da Intent
+        // Salva email que logou
         email = intent.getStringExtra("email") ?: throw IllegalArgumentException("Usuário não fornecido")
 
         // Botão de voltar para tela principal
         binding.BackimageButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK // Limpa a pilha de atividades
-            startActivity(intent)
+            val resultIntent = Intent()
+            setResult(Activity.RESULT_CANCELED, resultIntent)
             finish()
         }
 
         // Botão para selecionar imagem da galeria
         binding.buttonSelecionarImagem.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
+            startActivityForResult(intent, 0)
         }
 
         // Botão para adicionar a lista
@@ -48,16 +47,16 @@ class AddListActivity : AppCompatActivity() {
                 val novaLista = Lista(
                     id = UUID.randomUUID().toString(),
                     nome = nomeLista,
-                    imagemUri = selectedImageUri
+                    imagemUri = selectedImageUri?.toString()
                 )
 
-                ListaBD.addLista(novaLista) // Adiciona a lista no banco de dados ListaBD
+                ListaBD.addLista(novaLista)
 
-                // Adiciona a lista ao Usuario logado
+                // Adiciona a lista ao Usuário logado
                 val usuario = UsuarioBD.usuariosCadastrados.find { it.email == email }
                 usuario?.listaDeCompras?.add(novaLista)
 
-                // Passa a nova lista de volta para a ListActivity
+                // Atualiza a lista para a ListActivity
                 val resultIntent = Intent().apply {
                     putExtra("novaLista", novaLista)
                 }
@@ -72,14 +71,10 @@ class AddListActivity : AppCompatActivity() {
     // Salva URI da imagem
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
             selectedImageUri = data?.data
             // Atualiza a ImageView com a imagem selecionada
             binding.imageView.setImageURI(selectedImageUri)
         }
-    }
-
-    companion object {
-        private const val REQUEST_CODE_PICK_IMAGE = 0
     }
 }

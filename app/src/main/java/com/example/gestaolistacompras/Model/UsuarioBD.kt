@@ -38,8 +38,6 @@ object UsuarioBD {
         admin.listaDeCompras.addAll(listOf(adminLista1, adminLista2))
         usuariosCadastrados.add(admin)
 
-
-
         // Listas gab
         val gabLista1 = Lista(UUID.randomUUID().toString(), "Lista do Gab 1", null, mutableListOf())
         val gabLista2 = Lista(UUID.randomUUID().toString(), "Lista do Gab 2", null, mutableListOf())
