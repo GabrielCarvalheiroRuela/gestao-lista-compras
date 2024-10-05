@@ -98,13 +98,16 @@ class ListActivity : AppCompatActivity() {
             val usuario = UsuarioBD.usuariosCadastrados.find { it.email == userEmail }
 
             if (usuario != null) {
-                // Limpa as listas anteriores
+                // Limpa as listas anteriores para evitar duplicações
                 listas.clear()
+                listasFiltradas.clear()
+
                 // Adiciona as listas do usuário
                 listas.addAll(usuario.listaDeCompras)
+
                 // Atualiza as listas filtradas
-                listasFiltradas.clear()
                 listasFiltradas.addAll(listas)
+
                 // Notifica o adapter sobre mudanças
                 listAdapter.notifyDataSetChanged()
             }
@@ -121,13 +124,8 @@ class ListActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_LIST && resultCode == Activity.RESULT_OK) {
-            val novaLista = data?.getSerializableExtra("novaLista") as? Lista
-            novaLista?.let { lista ->
-                // Busca o usuário pelo email
-                val usuario = UsuarioBD.usuariosCadastrados.find { it.email == email }
-                usuario?.listaDeCompras?.add(lista)
-                loadUserLists()
-            }
+            // A lista será carregada novamente em onResume através de loadUserLists()
+            loadUserLists()
         }
     }
 }

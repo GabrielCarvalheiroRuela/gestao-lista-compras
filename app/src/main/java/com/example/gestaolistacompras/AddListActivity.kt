@@ -51,9 +51,17 @@ class AddListActivity : AppCompatActivity() {
                     imagemUri = selectedImageUri
                 )
 
-                ListaBD.addLista(novaLista) // Adiciona a lista no banco de dados
+                ListaBD.addLista(novaLista) // Adiciona a lista no banco de dados ListaBD
 
-                setResult(Activity.RESULT_OK)
+                // Adiciona a lista ao Usuario logado
+                val usuario = UsuarioBD.usuariosCadastrados.find { it.email == email }
+                usuario?.listaDeCompras?.add(novaLista)
+
+                // Passa a nova lista de volta para a ListActivity
+                val resultIntent = Intent().apply {
+                    putExtra("novaLista", novaLista)
+                }
+                setResult(Activity.RESULT_OK, resultIntent)
                 finish()
             } else {
                 Toast.makeText(this, "Por favor, preencha todos os dados.", Toast.LENGTH_SHORT).show()
