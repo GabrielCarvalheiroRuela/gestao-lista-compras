@@ -53,6 +53,9 @@ class ListActivity : AppCompatActivity() {
 
         // Botão para sair do sistema
         binding.LogoutimageButton.setOnClickListener {
+            // Limpa todos os dados das listas e itens
+            clearUserData()
+
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
@@ -112,6 +115,13 @@ class ListActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_LIST && resultCode == Activity.RESULT_OK) {
             loadUserLists()
+        }
+    }
+    // Função para limpar os dados do usuário ao sair do sistema
+    private fun clearUserData() {
+        email?.let { userEmail ->
+            val usuario = UsuarioBD.usuariosCadastrados.find { it.email == userEmail }
+            usuario?.listaDeCompras?.clear()
         }
     }
 }

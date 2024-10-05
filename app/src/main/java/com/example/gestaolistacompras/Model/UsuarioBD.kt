@@ -25,7 +25,7 @@ object UsuarioBD {
     }
 
     // Cria usuários com duas listas, para facilitar testes
-    init {
+    /*init {
         // Usuário admin
         val admin = Usuario("admin", "admin", "admin")
         // Usuário Gab
@@ -45,4 +45,5 @@ object UsuarioBD {
         gab.listaDeCompras.addAll(listOf(gabLista1, gabLista2))
         usuariosCadastrados.add(gab)
     }
+    */
 }

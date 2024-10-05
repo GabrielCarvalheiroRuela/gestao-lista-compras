@@ -2,9 +2,10 @@ package com.example.gestaolistacompras
 
 import android.content.Intent
 import android.os.Bundle
-import com.example.gestaolistacompras.Model.Usuario
+import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.gestaolistacompras.Model.Usuario
 import com.example.gestaolistacompras.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
@@ -26,6 +27,12 @@ class RegisterActivity : AppCompatActivity() {
             // Verifica campos vazios
             if (nome.isEmpty() || email.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
                 Toast.makeText(this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Verifica se o formato do e-mail é válido
+            if (!isValidEmail(email)) {
+                Toast.makeText(this, "Por favor, insira um e-mail válido", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -58,5 +65,10 @@ class RegisterActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    // Função para verificar se o e-mail é válido
+    private fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 }

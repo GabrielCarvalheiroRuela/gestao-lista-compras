@@ -32,7 +32,8 @@ class MainActivity : AppCompatActivity() {
         // Carrega os itens da lista clicada
         listaId?.let {
             itemList = ItemBD.getItensDaLista(it)
-            filteredItemList.addAll(itemList) // Inicializa a lista filtrada
+            // Inicializa a lista filtrada
+            filteredItemList.addAll(itemList)
         }
 
         // Configuração RecyclerView
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         binding.AddButton.setOnClickListener {
             val intent = Intent(this, AddItemActivity::class.java)
             intent.putExtra("email", email)
-            intent.putExtra("lista_id", listaId) // Passar também o listaId
+            intent.putExtra("lista_id", listaId)
             startActivityForResult(intent, REQUEST_CODE_ADD_ITEM)
         }
 
@@ -79,7 +80,8 @@ class MainActivity : AppCompatActivity() {
     private fun filterItems(query: String) {
         filteredItemList.clear()
         if (query.isEmpty()) {
-            filteredItemList.addAll(itemList) // Se não houver busca, mostra todos os itens
+            // Se tiver busca mostra todos os itens
+            filteredItemList.addAll(itemList)
         } else {
             itemList.forEach { item ->
                 if (item.name.lowercase().contains(query)) {
@@ -90,22 +92,34 @@ class MainActivity : AppCompatActivity() {
         itemAdapter.notifyDataSetChanged() // Atualiza a RecyclerView
     }
 
-    // Método executa quando a tela é carregada novamente
+    // Executa quando carrega a tela
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_ADD_ITEM && resultCode == RESULT_OK) {
-            val newItem = data?.getSerializableExtra("newItem") as? Item
-            val listaId = intent.getStringExtra("lista_id")
+        if (requestCode == REQUEST_CODE_ADD_ITEM) {
+            if (resultCode == RESULT_OK) {
+                val newItem = data?.getSerializableExtra("newItem") as? Item
+                val listaId = intent.getStringExtra("lista_id")
 
-            newItem?.let {
-                // Adicionar item na lista correta
-                listaId?.let { id ->
-                    ItemBD.addItemNaLista(id, it)
+                newItem?.let {
+                    // Adicionar item na lista correta do usuario logado
+                    listaId?.let { id ->
+                        ItemBD.addItemNaLista(id, it)
+                    }
+
+                    // atualiza a lista e a RecyclerView
+                    itemList.add(it)
+                    filterItems("")
                 }
-
-                // Atualizar a lista e a RecyclerView
-                itemList.add(it)
-                filterItems("") // Atualiza a busca para incluir o novo item
+            } else if (resultCode == RESULT_CANCELED) {
+                // Recarrega os itens da lista
+                val listaId = intent.getStringExtra("lista_id")
+                listaId?.let {
+                    itemList = ItemBD.getItensDaLista(it)
+                    filteredItemList.clear()
+                    filteredItemList.addAll(itemList)
+                    // Atualiza a RecyclerView
+                    itemAdapter.notifyDataSetChanged()
+                }
             }
         }
     }
