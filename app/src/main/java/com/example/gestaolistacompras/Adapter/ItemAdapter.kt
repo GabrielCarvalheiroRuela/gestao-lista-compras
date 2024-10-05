@@ -1,3 +1,4 @@
+// Gabriel Carvalheiro Ruela - 837871
 package com.example.gestaolistacompras.Adapter
 
 import android.view.LayoutInflater
